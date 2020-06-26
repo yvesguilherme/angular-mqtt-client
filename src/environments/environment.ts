@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   mqtt: {
     protocol: 'ws',
-    host: 'mqtt.eclipse.org',
-    port: '1883',
+    host: 'broker.mqttdashboard.com',
+    port: '8000',
   },
 };
 

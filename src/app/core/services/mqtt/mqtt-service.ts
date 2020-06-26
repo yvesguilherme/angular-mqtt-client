@@ -185,7 +185,7 @@ export class MqttService {
       console.error(`Erro ao gerar o signature: ${error}`);
     }
 
-    MqttService.mqttService.client.publish(topic, JSON.stringify(payload), { qos: 0 });
+    MqttService.mqttService.client.publish(topic, JSON.stringify(payload), { qos: 2 });
   }
 
   public static close() {

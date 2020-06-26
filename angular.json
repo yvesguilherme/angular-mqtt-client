@@ -30,7 +30,15 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/javascript/sha.js",
+              "src/assets/javascript/pako.js",
+              "src/assets/javascript/otplib.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "hi-base32",
+              "mqtt"
+            ]
           },
           "configurations": {
             "production": {
