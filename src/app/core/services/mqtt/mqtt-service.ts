@@ -56,11 +56,11 @@ export class MqttService {
     MqttService.mqttService.client = MqttService.mqttService.mqtt.connect(opcoesConexao);
 
     MqttService.mqttService.client.on('connect', function (): any {
-      console.warn('Cliente conectado');
+      console.warn('Client conectado');
     }.bind(MqttService.mqttService));
 
     MqttService.mqttService.client.on('close', function (): any {
-      console.warn('Cliente desconectado');
+      console.warn('Client desconectado');
     });
 
     MqttService.mqttService.client.on('message', function (topic, message): any {

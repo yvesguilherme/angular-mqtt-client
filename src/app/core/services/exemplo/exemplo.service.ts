@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
 
+/** MQTT */
 import { Deferred } from '../mqtt/promise/deferred';
 import { MqttFactory } from '../mqtt/mqtt-factory';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TesteService {
+export class ExemploService {
+
   private timeout = 30 * 1000;
   private topicos = {
-    teste: 'topico/teste'
+    exemploTopico: 'api/topico/exemplo/teste'
   };
 
   constructor() { }
 
-  /** Busca as negociacoes vigente por cliente */
-  teste(input: any) {
-    return this.realizarRequisicao(this.topicos.teste, input);
+  /** Método que será chamado por quem implementar esta service. */
+  fazerRequisicaoAoBroker(input: any) {
+    return this.realizarRequisicao(this.topicos.exemploTopico, input);
   }
 
-  /** Realiza a requisição ao broker (gravity) pelo protocolo MQTT. */
-  realizarRequisicao(topico: any, input: any) {
+  /** Realiza a requisição ao broker. */
+  private realizarRequisicao(topico: any, input: any) {
     const deferred = new Deferred();
     const uuid = MqttFactory.gerarUuid();
 

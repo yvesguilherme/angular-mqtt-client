@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { TesteService } from '../app/core/services/teste/teste.service';
 import { MqttService } from './core/services/mqtt/mqtt-service';
 
 @Component({
@@ -11,23 +10,16 @@ import { MqttService } from './core/services/mqtt/mqtt-service';
 export class AppComponent implements OnInit {
   title = 'angular-mqtt-client';
 
-  constructor(private testService: TesteService) {
+  constructor() {
+
+    /**
+     * Abre uma conexão com o broker.
+     * Da forma que foi implementada a service,
+     * esta conexão ocorrerá apenas uma única vez
+     * durante o ciclo de vida da aplicação.
+     */
     MqttService.abrirConexao(new Date().getTime());
   }
 
-  ngOnInit(): void {
-    this.teste2();
-  }
-
-  teste2() {
-    const input = {
-      teste: {
-        nome: 'Yves'
-      }
-    };
-
-    this.testService.teste(input)
-      .then((resposta: any) => console.log(resposta))
-      .catch((falha: any) => console.error(falha));
-  }
+  ngOnInit(): void {}
 }
