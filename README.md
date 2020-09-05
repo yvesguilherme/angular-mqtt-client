@@ -1,27 +1,28 @@
-# Angular 10.0.5 MQTT Client
+# Angular 10.1.5 MQTT Client
 
-Este projeto é um exemplo de um Client MQTT utilizando o Framework Angular.
-Angular é uma plataforma de desenvolvimento para a construção de aplicações Web, dispositivos móveis e desktops usando TypeScript / JavaScript e outras linguagens.
+<h4 align="center">
+  🚀 Este projeto é um exemplo de Client MQTT utilizando o framework Angular.
+</h4>
 
-## Angular Quickstart
+## :bulb: Angular
 
-[Get started in 5 minutes][quickstart].
+[Leia sobre...][quickstart]
 
-## MQTT Quickstart
+## :bulb: Angular CLI
 
-[Get started][quickstartMQTT]
+[Leia sobre...][quickstartAngularCLI]
 
-## Changelog
+## :bulb: Biblioteca MQTT.js
 
-[Learn about the latest improvements][changelog].
+[Leia sobre...][quickstartMQTT]
 
-## Want to help?
+## :twisted_rightwards_arrows: Melhorias mais recentes do Angular
 
-Want to file a bug, contribute some code, or improve documentation? Excellent! Read up on our
-guidelines for [contributing][contributing] and then check out one of our issues in the [hotlist: community-help](https://github.com/angular/angular/labels/hotlist%3A%20community-help).
+[Leia sobre...][changelog]
 
-[contributing]: https://github.com/angular/angular/blob/master/CONTRIBUTING.md
 [quickstart]: https://angular.io/start
+[quickstartAngularCLI]: https://cli.angular.io/
 [quickstartMQTT]: https://github.com/mqttjs/MQTT.js
 [changelog]: https://github.com/angular/angular/blob/master/CHANGELOG.md
-[ng]: https://angular.io
+
+<p align="center">Desenvolvido por Yves Guilherme :rocket:</p>
