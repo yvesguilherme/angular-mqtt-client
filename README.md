@@ -1,5 +1,6 @@
-# Angular 10.0.0 MQTT Client
+# Angular 10.0.5 MQTT Client
 
+Este projeto é um exemplo de um Client MQTT utilizando o Framework Angular.
 Angular é uma plataforma de desenvolvimento para a construção de aplicações Web, dispositivos móveis e desktops usando TypeScript / JavaScript e outras linguagens.
 
 ## Angular Quickstart
