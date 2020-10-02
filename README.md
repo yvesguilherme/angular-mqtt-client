@@ -1,4 +1,4 @@
-<h1 align="center">Angular v10.1.3 MQTT Client</h1>
+<h1 align="center">Angular v10.1.4 MQTT Client</h1>
 
 <h4 align="center">🚀 Este projeto é um exemplo de Client MQTT utilizando o framework Angular.</h4>
 
