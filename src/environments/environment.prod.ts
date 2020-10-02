@@ -1,3 +1,8 @@
 export const environment = {
-  production: true
+  production: true,
+  mqtt: {
+    protocol: 'ws',
+    host: 'broker.mqttdashboard.com',
+    port: '8000',
+  },
 };
