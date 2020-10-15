@@ -1,6 +1,6 @@
-<h1 align="center">Angular v10.1.4 MQTT Client</h1>
+<h1 align="center">Angular v10.1.6 MQTT Client</h1>
 
-<h4 align="center">🚀 Este projeto é um exemplo de Client MQTT utilizando o framework Angular, Docker e Nginx.</h4>
+<!-- <h4 align="center">🚀 Este projeto é um Client MQTT utilizando como tecnologia o framework Angular, Docker e Nginx.</h4> -->
 
 ## :bulb: Angular
 
