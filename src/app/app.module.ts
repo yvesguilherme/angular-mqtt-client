@@ -10,8 +10,6 @@ import { ExponentialStrengthExamplePipe } from './shared/pipes/exponential-stren
 import { ExampleDirectiveDirective } from './shared/directives/example-directive.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { MatSliderModule } from '@angular/material/slider';
-
 
 @NgModule({
   declarations: [
@@ -25,8 +23,7 @@ import { MatSliderModule } from '@angular/material/slider';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
-    MatSliderModule
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
