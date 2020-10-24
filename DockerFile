@@ -1,27 +1,27 @@
 ## Estágio 1: Buildar uma imagem Docker com Angular.
-FROM node:14.11.0-alpine3.11 as build
-
-COPY package*.json ./
-
-RUN npm i && mkdir /app && mv ./node_modules ./app
+FROM node:14.11.0-alpine3.11 as angular-build
 
 WORKDIR /app
 
-COPY . .
+COPY package*.json /app/
+
+RUN npm install
+
+COPY ./ /app/
+
+# Environment padrão caso nenhuma seja passada no momento do build da aplicação.
+ARG configuration=prd
 
 # Build da aplicação Angular com a flag --prod e armazenar os arquivos compilados na pasta /dist.
-RUN $(npm bin)/ng build --prod --output-path=dist
+RUN npm run build -- --output-path=./dist/out --configuration $configuration
 
 ## Estágio 2: Pegar o arquivo compilado e disponibilizá-lo no Nginx.
 FROM nginx:1.19.2-alpine
 
+# Copia os arquivos da pasta /dist/out/ do build da imagem Docker com Angular, para a pasta pública padrão do Nginx.
+COPY --from=angular-build /app/dist/out/ /usr/share/nginx/html
+
 # Altera a configuração padrão do Nginx para a configuração customizada.
-COPY /nginx-custom.conf /etc/nginx/conf.d/default.conf
-
-# Remove a index padrão do Nginx.
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copia os arquivos da pasta /dist do build da imagem Docker com Angular, para a pasta pública padrão do Nginx.
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY  ./nginx-custom.conf /etc/nginx/conf.d/default.conf
 
 CMD ["nginx", "-g", "daemon off;"]
