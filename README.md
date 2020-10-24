@@ -1,31 +1,51 @@
-<h1 align="center">Angular v10.1.6 MQTT Client</h1>
+<h1 align="center">Angular v10.2.0 MQTT Client</h1>
 
-<!-- <h4 align="center">🚀 Este projeto é um Client MQTT utilizando como tecnologia o framework Angular, Docker e Nginx.</h4> -->
+## :rocket: Tecnologias
 
-## :bulb: Angular
+Esse projeto foi desenvolvido com as seguintes tecnologias:
 
-[Leia sobre...][quickstart]
+- [Angular](https://angular.io/start)
+- [Angular CLI](https://cli.angular.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Node.js](https://nodejs.org/en/)
+- [MQTT.js](https://github.com/mqttjs/MQTT.js)
+- [Docker](https://docs.docker.com/get-started/)
+- [OTPLIB](https://github.com/yeojz/otplib)
+- [Pako](https://github.com/nodeca/pako)
+- [jsSHA](http://caligatio.github.com/jsSHA/)
 
-## :bulb: Angular CLI
+## :package: Instalando as dependências
 
-[Leia sobre...][quickstartAngularCLI]
+```bash
+# Vá para a para do projeto e instale as dependências com os comandos:
+$ cd angular-mqtt-client
 
-## :twisted_rightwards_arrows: Melhorias mais recentes do Angular
+$ npm install
+```
 
-[Leia sobre...][changelog]
+## 💻 Subindo aplicação local
 
-## :bulb: Biblioteca MQTT.js
+```bash
+# Na pasta do projeto e com o Angular CLI instalado, execute o comando:
+$ ng serve -o
+```
 
-[Leia sobre...][quickstartMQTT]
+## :bulb: Utilizando o Docker
+```bash
+# Certifique-se que tenha o Docker instalado em seu computador, vá para a pasta raiz do projeto e execute o comando:
+$ cd angular-mqtt-client
 
-## :bulb: Docker
+# Builda a imagem com a environment production (padrão).
+$ docker build -t angular-mqtt-client:prd .
 
-[Leia sobre...][quickstartDocker]
+# Builda a imagem com a environment que passar como parâmetro (dev ou stg).
+$ docker build -t angular-mqtt-client:dev --build-arg configuration="dev" .
 
-[quickstart]: https://angular.io/start
-[quickstartAngularCLI]: https://cli.angular.io/
-[quickstartMQTT]: https://github.com/mqttjs/MQTT.js
-[changelog]: https://github.com/angular/angular/blob/master/CHANGELOG.md
-[quickstartDocker]: https://docs.docker.com/get-started/
+# Teste sua imagem gerada passando também a environment (dev/stg/prd) como parâmetro.
+$ docker run -p 80:80 angular-mqtt-client:dev
+
+# Abra o browser e teste a aplicação.
+http://localhost
+```
 
 <p align="center">Desenvolvido por Yves Guilherme :rocket:</p>
