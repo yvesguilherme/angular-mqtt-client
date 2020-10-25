@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 
-/** Environment */
+/** Configurações. */
+import { CONFIGURACOES_MQTT } from './config/configuracoes';
+
+/** Environment. */
 import { environment } from 'src/environments/environment';
 
 /** MQTT - https://www.npmjs.com/package/mqtt */
@@ -25,7 +28,7 @@ export class MqttService {
 
   static mqttService: any = {};
 
-  public static abrirConexao(clientId) {
+  public static abrirConexao(clientId: number) {
     if (!MqttService.mqttService.client) {
       MqttService.mqttService.clientId = `${clientId}-${Math.floor((Math.random() * 999999999) + 1)}`;
       MqttService.mqttService.mqtt = mqtt;
@@ -63,12 +66,12 @@ export class MqttService {
       console.warn('Client desconectado');
     });
 
-    MqttService.mqttService.client.on('message', function (topic, message): any {
+    MqttService.mqttService.client.on('message', function (topico, message): any {
 
-      const uuid = MqttService.pegarUuid(topic);
+      const uuid = MqttService.pegarUuid(topico);
 
       const funcao = MqttService.mqttService.listaOnMessage[uuid];
-      funcao(topic, MqttService.parseResult(message));
+      funcao(topico, MqttService.analisarResultado(message));
 
       if (!MqttService.mqttService.listaManterConexao[uuid]) {
         delete MqttService.mqttService.listaOnMessage[uuid];
@@ -78,31 +81,25 @@ export class MqttService {
           delete MqttService.mqttService.listaTimeout[uuid];
         }
 
-        MqttService.mqttService.client.unsubscribe(topic);
+        MqttService.mqttService.client.unsubscribe(topico);
 
-        let index = topic.indexOf('failure');
-        if (index > 0) {
-          const subTopic = `${topic.slice(0, index)}success${topic.slice(index + 7)}`;
-          MqttService.mqttService.client.unsubscribe(subTopic);
-        } else {
-          index = topic.lastIndexOf('success');
-          const subTopic = `${topic.slice(0, index)}failure/${topic.slice(index + 8)}`;
-          MqttService.mqttService.client.unsubscribe(subTopic);
+        if (CONFIGURACOES_MQTT.habilitarTopicosSucessoFalha) {
+          let index = topico.indexOf(CONFIGURACOES_MQTT.topicoFalha);
+          if (index > 0) {
+            const subTopico = `${topico.slice(0, index)}${CONFIGURACOES_MQTT.topicoSucesso}${topico.slice(index + 7)}`;
+            MqttService.mqttService.client.unsubscribe(subTopico);
+          } else {
+            index = topico.lastIndexOf(CONFIGURACOES_MQTT.topicoSucesso);
+            const subTopico = `${topico.slice(0, index)}${CONFIGURACOES_MQTT.topicoFalha}/${topico.slice(index + 8)}`;
+            MqttService.mqttService.client.unsubscribe(subTopico);
+          }
         }
       }
     }.bind(MqttService.mqttService));
   }
 
-  public static subscribe(topic, uuid, onMessage, manterConexao, escutar = false) {
-    if (!topic) {
-      return false;
-    }
-
-    if (!uuid) {
-      return false;
-    }
-
-    if (!onMessage) {
+  public static subscribe(topico, uuid, onMessage, manterConexao) {
+    if (!topico || !uuid || !onMessage) {
       return false;
     }
 
@@ -112,39 +109,45 @@ export class MqttService {
 
     MqttService.mqttService.listaOnMessage[uuid] = onMessage;
 
-    if (escutar) {
-      MqttService.mqttService.client.subscribe(topic);
+    if (CONFIGURACOES_MQTT.habilitarTopicosSucessoFalha) {
+      MqttService.mqttService.client.subscribe(
+        MqttService.retornarTopicoSucessoUuid(topico, uuid)
+      );
+
+      MqttService.mqttService.client.subscribe(
+        MqttService.retornarTopicoFalhaUuid(topico, uuid)
+      );
     } else {
-      MqttService.mqttService.client.subscribe(`${topic}/response/success/${uuid}`);
-      MqttService.mqttService.client.subscribe(`${topic}/response/failure/${uuid}`);
+      MqttService.mqttService.client.subscribe(`${topico}/${uuid}`);
     }
   }
 
-  public static unsubscribe(topic, uuid) {
-    MqttService.mqttService.client.unsubscribe(`${topic}/response/success/${uuid}`);
-    MqttService.mqttService.client.unsubscribe(`${topic}/response/failure/${uuid}`);
-  }
-
-  public static publish(input, topic, uuid, timeout) {
+  public static publish(parametrosRequisicao, topico, uuid, timeout) {
     if (!MqttService.mqttService.client) {
       return false;
     }
 
-    const topicoSucesso = `${topic}/response/success/${uuid}`;
-    const topicoFalha = `${topic}/response/failure/${uuid}`;
-
     if (timeout) {
       MqttService.mqttService.listaTimeout[uuid] = setTimeout(function (): any {
-        MqttService.mqttService.client.unsubscribe(topicoSucesso);
-        MqttService.mqttService.client.unsubscribe(topicoFalha);
-        MqttService.mqttService.listaOnMessage[uuid](topicoFalha, 'timeout');
-      }.bind(MqttService.mqttService), timeout * 1.5);
+
+        if (CONFIGURACOES_MQTT.habilitarTopicosSucessoFalha) {
+          MqttService.mqttService.client.unsubscribe(MqttService.retornarTopicoSucessoUuid(topico, uuid));
+
+          MqttService.mqttService.client.unsubscribe(MqttService.retornarTopicoFalhaUuid(topico, uuid));
+
+          MqttService.mqttService.listaOnMessage[uuid](MqttService.retornarTopicoFalhaUuid(topico, uuid), 'timeout');
+        } else {
+          MqttService.mqttService.client.unsubscribe(`${topico}/${uuid}`);
+
+          MqttService.mqttService.listaOnMessage[uuid](`${topico}/${uuid}`, 'timeout');
+        }
+      }.bind(MqttService.mqttService), timeout);
     } else {
       timeout = 0;
     }
 
     const apiKey = `MQTT-CLIENT-WEB-${Math.floor((Math.random() * 999999999) + 1)}`;
-    const secret = encode(`${apiKey}${topic}`);
+    const secret = encode(`${apiKey}${topico}`);
     const signature = '';
 
     otplib.authenticator.options = {
@@ -157,10 +160,10 @@ export class MqttService {
     try {
       otplib.authenticator.check(token, secret);
     } catch (error) {
-      console.error(`Erro ao gerar o token: ${error}`);
+      throw new Error(`Erro ao gerar o token: ${error}`);
     }
 
-    const payload: any = {
+    const objetoRequisicao: any = {
       meta: {
         uuid
       },
@@ -170,7 +173,7 @@ export class MqttService {
         nonce: parseInt(token, 10)
       },
       envelope: {
-        input,
+        parametrosRequisicao,
         timeout
       }
     };
@@ -179,13 +182,21 @@ export class MqttService {
       const objHmac = new jsSHA('SHA-1', 'TEXT');
 
       objHmac.setHMACKey(apiKey, 'TEXT');
-      objHmac.update(`${topic}${JSON.stringify(payload.envelope)}`);
-      payload.header.signature = objHmac.getHMAC('HEX');
+      objHmac.update(`${topico}${JSON.stringify(objetoRequisicao.envelope)}`);
+      objetoRequisicao.header.signature = objHmac.getHMAC('HEX');
     } catch (error) {
-      console.error(`Erro ao gerar o signature: ${error}`);
+      throw new Error(`Erro ao gerar o signature: ${error}`);
     }
 
-    MqttService.mqttService.client.publish(topic, JSON.stringify(payload), { qos: 2 });
+    MqttService.mqttService.client.publish(topico, JSON.stringify(objetoRequisicao), { qos: 2 });
+  }
+
+  static retornarTopicoSucessoUuid(topico, uuid) {
+    return `${topico}/${CONFIGURACOES_MQTT.topicoSucesso}/${uuid}`;
+  }
+
+  static retornarTopicoFalhaUuid(topico, uuid) {
+    return `${topico}/${CONFIGURACOES_MQTT.topicoFalha}/${uuid}`;
   }
 
   public static close() {
@@ -200,7 +211,7 @@ export class MqttService {
     }
   }
 
-  static parseResult(mensagem: any) {
+  static analisarResultado(mensagem: any) {
     let resposta: any;
 
     // tslint:disable-next-line: no-bitwise
@@ -212,25 +223,21 @@ export class MqttService {
       resposta = `${mensagem}`;
     }
 
-    /**
-     * Verificar como está a resposta no envelope do micro-serviço.
-     * Para este exemplo é: envelope { result: []}
-     */
     try {
       resposta = JSON.parse(resposta.replace('\n', ''));
-      if (resposta && resposta.envelope) {
-        if (resposta.envelope.result) {
-          return resposta.envelope.result;
+      if (resposta?.[CONFIGURACOES_MQTT.objetoRespostaBackEnd]) {
+        if (resposta[CONFIGURACOES_MQTT.objetoRespostaBackEnd][CONFIGURACOES_MQTT.objetoArrayInternoRespostaBackEnd]) {
+          return resposta[CONFIGURACOES_MQTT.objetoRespostaBackEnd][CONFIGURACOES_MQTT.objetoArrayInternoRespostaBackEnd];
         }
-        return resposta.envelope;
+        return resposta[CONFIGURACOES_MQTT.objetoRespostaBackEnd];
       }
     } catch (error) {
-      return 'Resposta inválida do micro-serviço!';
+      return 'Resposta inválida do back-end!';
     }
     return null;
   }
 
-  static pegarUuid(topic) {
-    return topic.substring(topic.lastIndexOf('/') + 1);
+  static pegarUuid(topico) {
+    return topico.substring(topico.lastIndexOf('/') + 1);
   }
 }
