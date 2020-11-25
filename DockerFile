@@ -1,5 +1,5 @@
 ## Estágio 1: Buildar uma imagem Docker com Angular.
-FROM node:14.11.0-alpine3.11 as angular-build
+FROM node:14.15.1-alpine as angular-build
 
 WORKDIR /app
 
