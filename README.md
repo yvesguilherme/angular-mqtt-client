@@ -1,4 +1,4 @@
-<h1 align="center">Angular v11.0.0 MQTT Client</h1>
+<h1 align="center">Angular v11.0.2 MQTT Client</h1>
 
 ## :rocket: Tecnologias
 
