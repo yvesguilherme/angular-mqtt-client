@@ -47,6 +47,7 @@ export class MqttService {
       protocol: environment.mqtt.protocol,
       host: MqttService.mqttService.host,
       port: MqttService.mqttService.port,
+      hostname: MqttService.mqttService.host,
       path: '/mqtt',
       protocolId: 'MQTT',
       protocolVersion: 4,
