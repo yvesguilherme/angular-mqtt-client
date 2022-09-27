@@ -71,3 +71,4 @@ global.Buffer = global.Buffer || require('buffer').Buffer;
 
 (window as any).global.util = (window as any).global.util || require('util').util;
 
+(window as any).fallback = { "url": require.resolve("url/") }
