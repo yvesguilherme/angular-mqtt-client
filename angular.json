@@ -167,6 +167,5 @@
         }
       }
     }
-  },
-  "defaultProject": "angular-mqtt-client"
+  }
 }
