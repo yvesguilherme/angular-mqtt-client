@@ -1,8 +1,8 @@
-<h1 align="center">Angular v11.0.2 MQTT Client</h1>
+<h1 align="center">Angular v14.2.3 MQTT Client</h1>
 
-## :rocket: Tecnologias
+## :rocket: Technologies
 
-Esse projeto foi desenvolvido com as seguintes tecnologias:
+This project was developed with the following technologies:
 
 - [Angular](https://angular.io/start)
 - [Angular CLI](https://cli.angular.io/)
@@ -14,38 +14,38 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Pako](https://github.com/nodeca/pako)
 - [jsSHA](http://caligatio.github.com/jsSHA/)
 
-## :package: Instalando as dependências
+## :package: Installing dependencies
 
 ```bash
-# Vá para a para do projeto e instale as dependências com os comandos:
+# Go to the project folder and install the dependencies with the commands below:
 $ cd angular-mqtt-client
 
 $ npm install
 ```
 
-## 💻 Subindo aplicação local
+## 💻 Running the local application
 
 ```bash
-# Na pasta do projeto e com o Angular CLI instalado, execute o comando:
+# In the project folder and with the Angular CLI installed, run the command below:
 $ ng serve -o
 ```
 
-## :bulb: Utilizando o Docker
+## :bulb: Using Docker
 ```bash
-# Certifique-se que tenha o Docker instalado em seu computador, vá para a pasta raiz do projeto e execute o comando:
+# Make sure Docker is installed on your computer, go to the root folder of your project and run the command below:
 $ cd angular-mqtt-client
 
-# Builda a imagem com a environment production (padrão).
+# Run the build with the production environment.
 $ docker build -t angular-mqtt-client:prd .
 
-# Builda a imagem com a environment que passar como parâmetro (dev ou stg).
+# Run the build with the environment passed as parameter (dev | stg).
 $ docker build -t angular-mqtt-client:dev --build-arg configuration="dev" .
 
-# Teste sua imagem gerada passando também a environment (dev/stg/prd) como parâmetro.
+# Testing the generated image.
 $ docker run -p 80:80 angular-mqtt-client:dev
 
-# Abra o browser e teste a aplicação.
+# Open your browser and browse the application.
 http://localhost
 ```
 
-<p align="center">Desenvolvido por Yves Guilherme :rocket:</p>
+<p align="center">Developed by Yves Guilherme Lopo R. Lima :rocket:</p>
